@@ -1,0 +1,119 @@
+:root {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0 1rem 2rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+}
+
+.hero h1 {
+  margin: 0;
+  color: #0ea5e9;
+}
+
+.layout {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.form-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.92rem;
+}
+
+input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.55rem 0.6rem;
+  font-size: 0.95rem;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  background: #0ea5e9;
+  color: #fff;
+  cursor: pointer;
+}
+
+.list {
+  margin: 0.8rem 0 0;
+  padding: 0;
+}
+
+.medicine-item {
+  list-style: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.medicine-title {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.medicine-meta {
+  margin: 0;
+  color: #475569;
+  font-size: 0.88rem;
+}
+
+.actions {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.btn-check {
+  background: #22c55e;
+}
+
+.btn-remove {
+  background: #ef4444;
+}
+
+.hint,
+.reminder {
+  font-size: 0.92rem;
+  color: #334155;
+}
+
+.reminder {
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 0.55rem;
+  margin-bottom: 0.5rem;
+}

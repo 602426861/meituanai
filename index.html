@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>慢病用药小管家</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>慢病用药小管家</h1>
+      <p>把「问诊－购药－用药－续方」串成一个连续、可提醒、可复盘的闭环服务。</p>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <h2>① 我的慢病档案</h2>
+        <form id="profile-form" class="form-grid">
+          <label>
+            姓名
+            <input id="name" type="text" placeholder="如：王女士" required />
+          </label>
+          <label>
+            慢病类型
+            <input id="condition" type="text" placeholder="如：高血压" required />
+          </label>
+          <label>
+            医生/机构
+            <input id="doctor" type="text" placeholder="如：李医生 / 社区医院" required />
+          </label>
+          <label>
+            复诊频率（天）
+            <input id="review-days" type="number" min="1" value="30" required />
+          </label>
+          <button type="submit">保存档案</button>
+        </form>
+        <p id="profile-summary" class="hint">尚未保存档案。</p>
+      </section>
+
+      <section class="card">
+        <h2>② 用药计划</h2>
+        <form id="medicine-form" class="form-grid">
+          <label>
+            药品名
+            <input id="medicine-name" type="text" placeholder="如：缬沙坦片" required />
+          </label>
+          <label>
+            每次剂量
+            <input id="dose" type="text" placeholder="如：80mg / 1片" required />
+          </label>
+          <label>
+            每日次数
+            <input id="times-per-day" type="number" min="1" max="6" value="2" required />
+          </label>
+          <label>
+            库存天数
+            <input id="stock-days" type="number" min="1" value="14" required />
+          </label>
+          <button type="submit">添加药品</button>
+        </form>
+        <ul id="medicine-list" class="list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>③ 今日提醒</h2>
+        <div id="today-reminders" class="list"></div>
+      </section>
+
+      <section class="card">
+        <h2>④ 续方与购药提醒</h2>
+        <div id="renewal-reminders" class="list"></div>
+      </section>
+    </main>
+
+    <template id="medicine-item-template">
+      <li class="medicine-item">
+        <div>
+          <strong class="medicine-title"></strong>
+          <p class="medicine-meta"></p>
+        </div>
+        <div class="actions">
+          <button class="btn-check" type="button">今日已服</button>
+          <button class="btn-remove" type="button">删除</button>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>

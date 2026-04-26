@@ -1,4 +1,34 @@
-const STORAGE_KEY = "medication_manager_data_v1";
+const STORAGE_KEY = "medication_manager_data_v2";
+
+const DEFAULT_STATE = {
+  profile: {
+    name: "王女士",
+    condition: "高血压",
+    doctor: "李医生 / 社区医院",
+    reviewDays: 30,
+    lastReviewDate: "2026-04-20"
+  },
+  medicines: [
+    {
+      id: "sample-1",
+      name: "缬沙坦片",
+      dose: "80mg / 1片",
+      timesPerDay: 1,
+      stockDays: 14,
+      createdAt: "2026-04-18",
+      lastTakenDate: ""
+    },
+    {
+      id: "sample-2",
+      name: "阿托伐他汀钙片",
+      dose: "20mg / 1片",
+      timesPerDay: 1,
+      stockDays: 20,
+      createdAt: "2026-04-15",
+      lastTakenDate: ""
+    }
+  ]
+};
 
 const state = {
   profile: null,
@@ -15,13 +45,21 @@ const medicineTemplate = document.getElementById("medicine-item-template");
 
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
+  if (!raw) {
+    state.profile = { ...DEFAULT_STATE.profile };
+    state.medicines = DEFAULT_STATE.medicines.map((item) => ({ ...item }));
+    saveState();
+    return;
+  }
+
   try {
     const data = JSON.parse(raw);
     state.profile = data.profile ?? null;
     state.medicines = Array.isArray(data.medicines) ? data.medicines : [];
   } catch {
-    localStorage.removeItem(STORAGE_KEY);
+    state.profile = { ...DEFAULT_STATE.profile };
+    state.medicines = DEFAULT_STATE.medicines.map((item) => ({ ...item }));
+    saveState();
   }
 }
 
@@ -37,7 +75,8 @@ function updateProfileSummary() {
 
   const { name, condition, doctor, reviewDays, lastReviewDate } = state.profile;
   const nextReview = addDays(lastReviewDate, Number(reviewDays));
-  profileSummary.textContent = `${name}｜${condition}｜随访医生：${doctor}｜下次建议复诊：${nextReview}`;
+  const reviewRemainingDays = daysUntil(nextReview);
+  profileSummary.textContent = `${name}｜${condition}｜随访医生：${doctor}｜下次建议复诊：${nextReview}（剩余 ${reviewRemainingDays} 天）`;
 }
 
 function renderMedicines() {
@@ -83,12 +122,20 @@ function renderReminders() {
     appendReminder(todayReminders, `${med.name}：建议按计划服用（${med.timesPerDay} 次/天）。${takenText}`);
 
     const refillDate = addDays(med.createdAt, Number(med.stockDays));
-    appendReminder(renewalReminders, `${med.name}：预计 ${refillDate} 库存见底，请提前问诊续方并购药。`);
+    const stockRemainingDays = daysUntil(refillDate);
+    appendReminder(
+      renewalReminders,
+      `${med.name}：预计 ${refillDate} 库存见底（剩余 ${stockRemainingDays} 天），请提前问诊续方并购药。`
+    );
   });
 
   if (state.profile) {
     const nextReview = addDays(state.profile.lastReviewDate, Number(state.profile.reviewDays));
-    appendReminder(renewalReminders, `复诊提醒：建议在 ${nextReview} 前完成线上复诊并续方。`);
+    const reviewRemainingDays = daysUntil(nextReview);
+    appendReminder(
+      renewalReminders,
+      `复诊提醒：建议在 ${nextReview} 前完成线上复诊并续方（剩余 ${reviewRemainingDays} 天）。`
+    );
   }
 }
 
@@ -107,6 +154,13 @@ function addDays(dateStr, days) {
   const d = new Date(dateStr);
   d.setDate(d.getDate() + days);
   return d.toISOString().slice(0, 10);
+}
+
+function daysUntil(targetDateStr) {
+  const todayDate = new Date(today());
+  const targetDate = new Date(targetDateStr);
+  const diffMs = targetDate - todayDate;
+  return Math.ceil(diffMs / (24 * 60 * 60 * 1000));
 }
 
 profileForm.addEventListener("submit", (e) => {
